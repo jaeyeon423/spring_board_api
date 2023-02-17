@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static farm.board.domain.RoleType.ROLE_NORMAL;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,12 +26,11 @@ public class Member extends EntityDate {
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
     @OneToMany(mappedBy = "member")
-    private List<Role> roles = new ArrayList<>();
-    public Member(String email, String password, String username, String nickname, List<Role> roles) {
+    private List<MemberRole> roles = new ArrayList<>();
+    public Member(String email, String password, String username, String nickname) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.nickname = nickname;
-        this.roles = roles;
     }
 }

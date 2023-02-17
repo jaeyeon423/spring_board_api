@@ -20,7 +20,7 @@ class MemberRepositoryTest {
         String nickname = "test_nickname";
         String username = "test_username";
 
-        Member member = new Member(email, password, username, nickname, null);
+        Member member = new Member(email, password, username, nickname);
 
         // when
         Member savedMember = memberRepository.save(member);
@@ -40,10 +40,10 @@ class MemberRepositoryTest {
         String password = "password";
         String nickname = "test_nickname";
         String username = "test_username";
-        Member member = new Member(email, password, username, nickname, null);
+        Member member = new Member(email, password, username, nickname);
         memberRepository.save(member);
         // when
-        Member duplicateEmailMember = new Member(email, "new_password",  "new_username","new_nickname", null);
+        Member duplicateEmailMember = new Member(email, "new_password",  "new_username","new_nickname");
         assertThrows(DataIntegrityViolationException.class, () -> memberRepository.save(duplicateEmailMember));
     }
 
@@ -56,8 +56,8 @@ class MemberRepositoryTest {
         String nickname = "test_nickname";
         String username1 = "test_username1";
         String username2 = "test_username2";
-        Member member1 = new Member(email1, password, username1, nickname, null);
-        Member member2 = new Member(email2, password, username2, nickname, null);
+        Member member1 = new Member(email1, password, username1, nickname);
+        Member member2 = new Member(email2, password, username2, nickname);
         memberRepository.save(member1);
         // when, then
         assertThrows(DataIntegrityViolationException.class, () -> memberRepository.save(member2));

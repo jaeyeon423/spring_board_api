@@ -15,10 +15,7 @@ public class Role {
     private Long id;
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-    public Role(Long id, RoleType roleType) {
+    public Role(RoleType roleType) {
         this.roleType = roleType;
     }
 }
