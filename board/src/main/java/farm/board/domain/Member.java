@@ -33,4 +33,11 @@ public class Member extends EntityDate {
         this.username = username;
         this.nickname = nickname;
     }
+    public Member(String email, String password, String username, String nickname, List<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.nickname = nickname;
+        roles.stream().forEach(role -> this.roles.add(new MemberRole(this, role)));
+    }
 }

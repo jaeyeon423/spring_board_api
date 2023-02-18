@@ -1,8 +1,12 @@
 package farm.board.domain;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberRole {
 
     @Id
@@ -17,4 +21,8 @@ public class MemberRole {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    public MemberRole(Member member, Role role) {
+        this.member = member;
+        this.role = role;
+    }
 }
