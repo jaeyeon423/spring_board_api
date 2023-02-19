@@ -21,6 +21,7 @@ public class SignService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
+    @Transactional
     public void signUp(SignUpRequest req){
         validateSignUpInfo(req);
         memberRepository.save(SignUpRequest.toEntity(
