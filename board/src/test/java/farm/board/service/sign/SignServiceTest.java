@@ -6,6 +6,10 @@ import farm.board.domain.RoleType;
 import farm.board.dto.sign.SignInRequest;
 import farm.board.dto.sign.SignInResponse;
 import farm.board.dto.sign.SignUpRequest;
+import farm.board.exception.LoginFailureException;
+import farm.board.exception.MemberEmailAlreadyExistsException;
+import farm.board.exception.MemberNicknameAlreadyExistsException;
+import farm.board.exception.RoleNotFoundException;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.role.RoleRepository;
 import org.junit.jupiter.api.Test;
@@ -58,7 +62,7 @@ class SignServiceTest {
 
         // when, then
         assertThatThrownBy(() -> signService.signUp(createSignUpRequest()))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(MemberEmailAlreadyExistsException.class);
     }
 
     @Test
@@ -68,7 +72,7 @@ class SignServiceTest {
 
         // when, then
         assertThatThrownBy(() -> signService.signUp(createSignUpRequest()))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(MemberNicknameAlreadyExistsException.class);
     }
 
     @Test
@@ -78,7 +82,7 @@ class SignServiceTest {
 
         // when, then
         assertThatThrownBy(() -> signService.signUp(createSignUpRequest()))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(RoleNotFoundException.class);
     }
 
     @Test
@@ -104,7 +108,7 @@ class SignServiceTest {
 
         // when, then
         assertThatThrownBy(() -> signService.signIn(new SignInRequest("email", "password")))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(LoginFailureException.class);
     }
 
     @Test
@@ -115,7 +119,7 @@ class SignServiceTest {
 
         // when, then
         assertThatThrownBy(() -> signService.signIn(new SignInRequest("email", "password")))
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(LoginFailureException.class);
     }
 
 

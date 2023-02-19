@@ -22,7 +22,6 @@ public class Response {
     }
 
     public static Response failure(int code, String msg) { // 실패시에 실패 코드와 메세지를 보여준다.
-        System.out.println("msg = " + msg);
         return new Response(false, code, new Failure(msg));
     }
 }

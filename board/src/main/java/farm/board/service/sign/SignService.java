@@ -5,6 +5,10 @@ import farm.board.domain.RoleType;
 import farm.board.dto.sign.SignInRequest;
 import farm.board.dto.sign.SignInResponse;
 import farm.board.dto.sign.SignUpRequest;
+import farm.board.exception.LoginFailureException;
+import farm.board.exception.MemberEmailAlreadyExistsException;
+import farm.board.exception.MemberNicknameAlreadyExistsException;
+import farm.board.exception.RoleNotFoundException;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +30,19 @@ public class SignService {
         validateSignUpInfo(req);
         memberRepository.save(SignUpRequest.toEntity(
                 req,
-                roleRepository.findByRoleType(RoleType.ROLE_NORMAL).orElseThrow(RuntimeException::new),
+                roleRepository.findByRoleType(RoleType.ROLE_NORMAL).orElseThrow(RoleNotFoundException::new),
                 passwordEncoder
         ));
     }
     private void validateSignUpInfo(SignUpRequest req) {
         if(memberRepository.existsByEmail(req.getEmail()))
-            throw new RuntimeException();
+            throw new MemberEmailAlreadyExistsException(req.getEmail());
         if(memberRepository.existsByNickname(req.getNickname()))
-            throw new RuntimeException();
+            throw new MemberNicknameAlreadyExistsException(req.getNickname());
     }
 
     public SignInResponse signIn(SignInRequest req){
-        Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(LoginFailureException::new);
         validatePassword(req, member);
         String subject = createSubject(member);
         String accessToken = tokenService.createAccessToken(subject);
@@ -48,7 +52,7 @@ public class SignService {
 
     private void validatePassword(SignInRequest req, Member member) {
         if(!passwordEncoder.matches(req.getPassword(), member.getPassword())) {
-            throw new RuntimeException();
+            throw new LoginFailureException();
         }
     }
 
