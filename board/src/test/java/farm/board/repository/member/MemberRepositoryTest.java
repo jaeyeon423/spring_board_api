@@ -5,45 +5,38 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+
+import static farm.board.factory.domain.MemberFactory.createMember;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest // JPA 관련 구성만 로드하여 테스트
-class MemberRepositoryTest {
+class     MemberRepositoryTest {
     @Autowired MemberRepository memberRepository;
 
     @Test
     public void saveMemberTest(){
         // given
-        String email = "test@test.com";
-        String password = "password";
-        String nickname = "test_nickname";
-        String username = "test_username";
-
-        Member member = new Member(email, password, username, nickname);
+        Member member = createMember();
 
         // when
         Member savedMember = memberRepository.save(member);
 
         // then
         assertThat(savedMember).isNotNull();
-        assertThat(savedMember.getEmail()).isEqualTo(email);
-        assertThat(savedMember.getPassword()).isEqualTo(password);
-        assertThat(savedMember.getNickname()).isEqualTo(nickname);
-        assertThat(savedMember.getUsername()).isEqualTo(username);
+        assertThat(savedMember.getEmail()).isEqualTo(member.getEmail());
+        assertThat(savedMember.getPassword()).isEqualTo(member.getPassword());
+        assertThat(savedMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(savedMember.getUsername()).isEqualTo(member.getUsername());
     }
 
     @Test
     void saveMemberWithDuplicateEmailTest() {
         // given
-        String email = "test@test.com";
-        String password = "password";
-        String nickname = "test_nickname";
-        String username = "test_username";
-        Member member = new Member(email, password, username, nickname);
+        Member member = createMember();
         memberRepository.save(member);
         // when
-        Member duplicateEmailMember = new Member(email, "new_password",  "new_username","new_nickname");
+        Member duplicateEmailMember = new Member(member.getEmail(), "new_password",  "new_username","new_nickname");
         assertThrows(DataIntegrityViolationException.class, () -> memberRepository.save(duplicateEmailMember));
     }
 

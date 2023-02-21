@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static farm.board.factory.domain.MemberFactory.createMember;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -68,7 +69,5 @@ class MemberServiceTest {
         assertThatThrownBy(() -> memberService.delete(1L)).isInstanceOf(MemberNotFoundException.class);
     }
 
-    private Member createMember() {
-        return new Member("email@email.com", "123456a!", "username", "nickname", List.of());
-    }
+
 }
