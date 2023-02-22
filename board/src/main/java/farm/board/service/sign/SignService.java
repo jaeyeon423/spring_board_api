@@ -2,13 +2,11 @@ package farm.board.service.sign;
 
 import farm.board.domain.Member;
 import farm.board.domain.RoleType;
+import farm.board.dto.sign.RefreshTokenResponse;
 import farm.board.dto.sign.SignInRequest;
 import farm.board.dto.sign.SignInResponse;
 import farm.board.dto.sign.SignUpRequest;
-import farm.board.exception.LoginFailureException;
-import farm.board.exception.MemberEmailAlreadyExistsException;
-import farm.board.exception.MemberNicknameAlreadyExistsException;
-import farm.board.exception.RoleNotFoundException;
+import farm.board.exception.*;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class SignService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
@@ -41,6 +38,7 @@ public class SignService {
             throw new MemberNicknameAlreadyExistsException(req.getNickname());
     }
 
+    @Transactional(readOnly = true)
     public SignInResponse signIn(SignInRequest req){
         Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(LoginFailureException::new);
         validatePassword(req, member);
@@ -53,6 +51,19 @@ public class SignService {
     private void validatePassword(SignInRequest req, Member member) {
         if(!passwordEncoder.matches(req.getPassword(), member.getPassword())) {
             throw new LoginFailureException();
+        }
+    }
+
+    public RefreshTokenResponse refreshToken(String rToken) {
+        validateRefreshToken(rToken);
+        String subject = tokenService.extractRefreshTokenSubject(rToken);
+        String accessToken = tokenService.createAccessToken(subject);
+        return new RefreshTokenResponse(accessToken);
+    }
+
+    private void validateRefreshToken(String rToken) {
+        if(!tokenService.validateRefreshToken(rToken)) {
+            throw new AuthenticationEntryPointException();
         }
     }
 

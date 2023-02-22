@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 public class AuthHelper {
 
     public boolean isAuthenticated() {
-        log.info("1. {}", getAuthentication());
-
         return getAuthentication() instanceof CustomAuthenticationToken &&
                 getAuthentication().isAuthenticated();
     }
@@ -34,18 +32,10 @@ public class AuthHelper {
                 .collect(Collectors.toSet());
     }
 
-    public boolean isAccessTokenType() {
-        log.info("isAccessTokenType");
-        return "access".equals(((CustomAuthenticationToken) getAuthentication()).getType());
-    }
-
-    public boolean isRefreshTokenType() {
-        return "refresh".equals(((CustomAuthenticationToken) getAuthentication()).getType());
-    }
-
     private CustomUserDetails getUserDetails() {
         return (CustomUserDetails) getAuthentication().getPrincipal();
     }
+
     private Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }

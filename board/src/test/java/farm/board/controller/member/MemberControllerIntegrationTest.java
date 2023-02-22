@@ -18,15 +18,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static farm.board.factory.dto.SignInRequestFactory.createSignInRequest;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc // MockMvc를 자동으로 구성하여 사용
-@ActiveProfiles(value = "test") // local과 겹치지 않도록
+@AutoConfigureMockMvc // MockMvc 를 자동으로 구성하여 사용
+@ActiveProfiles(value = "test") // local 과 겹치지 않도록
 @Transactional
 class MemberControllerIntegrationTest {
     @Autowired
@@ -67,7 +67,7 @@ class MemberControllerIntegrationTest {
         // when, then
         mockMvc.perform(
                         delete("/api/members/{id}", member.getId())
-                                .header("Authorization", signInRes.getAccessToken())) // HTTP Header에 access token을 발급
+                                .header("Authorization", signInRes.getAccessToken())) // HTTP Header 에 access token 을 발급
                 .andExpect(status().isOk());
     }
 
@@ -108,16 +108,17 @@ class MemberControllerIntegrationTest {
                 .andExpect(redirectedUrl("/exception/access-denied"));
     }
 
+
     @Test
     void deleteAccessDeniedByRefreshTokenTest() throws Exception {
         // given
         Member member = memberRepository.findByEmail(initDB.getMember1Email()).orElseThrow(MemberNotFoundException::new);
-        SignInResponse signInRes = signService.signIn(new SignInRequest(initDB.getMember1Email(), initDB.getPassword()));
+        SignInResponse signInRes = signService.signIn(createSignInRequest(initDB.getMember1Email(), initDB.getPassword()));
 
         // when, then
         mockMvc.perform(
                         delete("/api/members/{id}", member.getId()).header("Authorization", signInRes.getRefreshToken()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exception/access-denied"));
+                .andExpect(redirectedUrl("/exception/entry-point"));
     }
 }

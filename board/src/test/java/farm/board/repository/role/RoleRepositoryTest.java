@@ -47,11 +47,11 @@ class RoleRepositoryTest {
         flush();
 
         // when
-        Optional<Role> found = roleRepository.findByRoleType(RoleType.ROLE_ADMIN);
+        Optional<Role> found = roleRepository.findByRoleType(RoleType.ROLE_NORMAL);
 
         // then
         assertTrue(found.isPresent());
-        assertThat(found.get().getRoleType()).isEqualTo(RoleType.ROLE_ADMIN);
+        assertThat(found.get().getRoleType()).isEqualTo(RoleType.ROLE_NORMAL);
     }
 
     @Test

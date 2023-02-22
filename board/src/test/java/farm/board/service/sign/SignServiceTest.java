@@ -3,13 +3,11 @@ package farm.board.service.sign;
 import farm.board.domain.Member;
 import farm.board.domain.Role;
 import farm.board.domain.RoleType;
+import farm.board.dto.sign.RefreshTokenResponse;
 import farm.board.dto.sign.SignInRequest;
 import farm.board.dto.sign.SignInResponse;
 import farm.board.dto.sign.SignUpRequest;
-import farm.board.exception.LoginFailureException;
-import farm.board.exception.MemberEmailAlreadyExistsException;
-import farm.board.exception.MemberNicknameAlreadyExistsException;
-import farm.board.exception.RoleNotFoundException;
+import farm.board.exception.*;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.role.RoleRepository;
 import org.junit.jupiter.api.Test;
@@ -21,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static farm.board.factory.domain.MemberFactory.createMember;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -122,13 +121,38 @@ class SignServiceTest {
                 .isInstanceOf(LoginFailureException.class);
     }
 
+    @Test
+    void refreshTokenTest() {
+        // given
+        String refreshToken = "refreshToken";
+        String subject = "subject";
+        String accessToken = "accessToken";
+        given(tokenService.validateRefreshToken(refreshToken)).willReturn(true);
+        given(tokenService.extractRefreshTokenSubject(refreshToken)).willReturn(subject);
+        given(tokenService.createAccessToken(subject)).willReturn(accessToken);
+
+        // when
+        RefreshTokenResponse res = signService.refreshToken(refreshToken);
+
+        // then
+        assertThat(res.getAccessToken()).isEqualTo(accessToken);
+    }
+
+    @Test
+    void refreshTokenExceptionByInvalidTokenTest() {
+        // given
+        String refreshToken = "refreshToken";
+        given(tokenService.validateRefreshToken(refreshToken)).willReturn(false);
+
+        // when, then
+        assertThatThrownBy(() -> signService.refreshToken(refreshToken))
+                .isInstanceOf(AuthenticationEntryPointException.class);
+    }
+
 
     private SignUpRequest createSignUpRequest() {
         return new SignUpRequest("email", "password", "username", "nickname");
     }
 
-    private Member createMember() {
-        return new Member("email", "password", "username", "nickname", emptyList());
-    }
 
 }

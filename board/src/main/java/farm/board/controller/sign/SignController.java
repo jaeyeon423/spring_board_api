@@ -6,10 +6,7 @@ import farm.board.dto.sign.SignUpRequest;
 import farm.board.service.sign.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,5 +28,11 @@ public class SignController {
     @ResponseStatus(HttpStatus.OK)//메소드의 실행 결과에 대한 HTTP 응답 코드를 HpptStatus.OK로 설정
     public Response signIn(@Valid @RequestBody SignInRequest req) {
         return success(signService.signIn(req)); // 로그인 처리
+    }
+
+    @PostMapping("/api/refresh-token")
+    @ResponseStatus(HttpStatus.OK)
+    public Response refreshToken(@RequestHeader(value = "Authorization") String refreshToken) {
+        return success(signService.refreshToken(refreshToken));
     }
 }

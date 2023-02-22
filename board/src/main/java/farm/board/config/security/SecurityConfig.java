@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음
                 .and()
                     .authorizeRequests() // 요청에 대한 인가를 구성
-                        .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up").permitAll()// 회원가입과 로그인 POST 요청은 인증 없이 허용
+                        .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up", "/api/refresh-token").permitAll()// 회원가입과 로그인 POST 요청은 인증 없이 허용
                         .antMatchers(HttpMethod.GET, "/api/**").permitAll() // /api/** Get 요청은 인증 없이 허용
                         .antMatchers(HttpMethod.DELETE, "/api/members/{id}/**").access("@memberGuard.check(#id)") //회원 삭제 요청은 MemberGuard.check 검사를 통해 권한이 있는 사용자만 허용
                         .anyRequest().hasAnyRole("ADMIN")
