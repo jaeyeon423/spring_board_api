@@ -1,5 +1,6 @@
 package farm.board.config.security;
 
+import farm.board.config.token.TokenHelper;
 import farm.board.service.sign.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity //Spring Security 를 사용하는 웹 어플리케이션을 활성화
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final TokenService tokenService;
+    private final TokenHelper accessTokenHelper;
     private final CustomUserDetailsService userDetailsService;
 
 
@@ -46,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                     .addFilterBefore( // JwtAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 앞에 등록
-                            new JwtAuthenticationFilter(tokenService, userDetailsService) //JWT 토큰 기반 인증
+                            new JwtAuthenticationFilter(accessTokenHelper, userDetailsService) //JWT 토큰 기반 인증
                             , UsernamePasswordAuthenticationFilter.class
                     );
     }
