@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/exception/**"); // /exception/** 패턴의 요청은 보안 검사를 거치지 않는다
+        web.ignoring().mvcMatchers("/exception/**","/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**"); // /exception/** 패턴의 요청은 보안 검사를 거치지 않는다
     }
 
     @Override

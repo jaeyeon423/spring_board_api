@@ -2,6 +2,8 @@ package farm.board.dto.sign;
 
 import farm.board.domain.Member;
 import farm.board.domain.Role;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,14 +15,17 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+@ApiModel(value = "회원가입 요청")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignUpRequest {
+    @ApiModelProperty(value = "이메일", notes = "이메일을 입력해주세요", required = true, example = "member@email.com")
     @Email(message = "이메일 형식을 맞춰주세요.")
     @NotBlank(message = "이메일을 입력해주세요.")
     private String email; // 1
 
+    @ApiModelProperty(value = "비밀번호", notes = "사용자의 비밀번호를 입력해주세요.", required = true, example = "123456a!")
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
             message = "비밀번호는 최소 8자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야합니다.")
