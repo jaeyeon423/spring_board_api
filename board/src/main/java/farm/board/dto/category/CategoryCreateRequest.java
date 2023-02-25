@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Data
@@ -14,6 +16,8 @@ import java.util.Optional;
 @NoArgsConstructor
 public class CategoryCreateRequest {
 
+    @NotBlank(message = "카테고리 명을 입력해주세요.")
+    @Size(min = 2, max = 30, message = "카테고리 명의 길이는 2글자에서 30글자 입니다.")
     private String name;
 
     private Long parentId;
