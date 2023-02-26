@@ -1,6 +1,6 @@
 package farm.board.dto.member;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

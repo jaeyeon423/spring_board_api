@@ -1,10 +1,12 @@
 package farm.board.repository.member;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+
+import java.util.Collections;
 
 import static farm.board.factory.domain.MemberFactory.createMember;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -36,7 +38,7 @@ class     MemberRepositoryTest {
         Member member = createMember();
         memberRepository.save(member);
         // when
-        Member duplicateEmailMember = new Member(member.getEmail(), "new_password",  "new_username","new_nickname");
+        Member duplicateEmailMember = new Member(member.getEmail(), "new_password",  "new_username","new_nickname", Collections.emptyList());
         assertThrows(DataIntegrityViolationException.class, () -> memberRepository.save(duplicateEmailMember));
     }
 
@@ -49,8 +51,8 @@ class     MemberRepositoryTest {
         String nickname = "test_nickname";
         String username1 = "test_username1";
         String username2 = "test_username2";
-        Member member1 = new Member(email1, password, username1, nickname);
-        Member member2 = new Member(email2, password, username2, nickname);
+        Member member1 = new Member(email1, password, username1, nickname, Collections.emptyList());
+        Member member2 = new Member(email2, password, username2, nickname, Collections.emptyList());
         memberRepository.save(member1);
         // when, then
         assertThrows(DataIntegrityViolationException.class, () -> memberRepository.save(member2));

@@ -1,7 +1,7 @@
 package farm.board.dto.sign;
 
-import farm.board.domain.Member;
-import farm.board.domain.Role;
+import farm.board.domain.member.Member;
+import farm.board.domain.member.Role;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

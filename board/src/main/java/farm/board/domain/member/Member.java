@@ -1,4 +1,4 @@
-package farm.board.domain;
+package farm.board.domain.member;
 
 import farm.board.domain.common.EntityDate;
 import lombok.AccessLevel;
@@ -8,8 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import static farm.board.domain.RoleType.ROLE_NORMAL;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Getter
@@ -25,19 +27,19 @@ public class Member extends EntityDate {
     private String username;
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
-    @OneToMany(mappedBy = "member")
-    private List<MemberRole> roles = new ArrayList<>();
-    public Member(String email, String password, String username, String nickname) {
-        this.email = email;
-        this.password = password;
-        this.username = username;
-        this.nickname = nickname;
-    }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+    private Set<MemberRole> roles;
+
     public Member(String email, String password, String username, String nickname, List<Role> roles) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.nickname = nickname;
-        roles.stream().forEach(role -> this.roles.add(new MemberRole(this, role)));
+        this.roles = roles.stream().map(r -> new MemberRole(this, r)).collect(toSet());
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

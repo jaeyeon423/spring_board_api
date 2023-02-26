@@ -1,8 +1,8 @@
 package farm.board.service.sign;
 
 import farm.board.config.token.TokenHelper;
-import farm.board.domain.Member;
-import farm.board.domain.RoleType;
+import farm.board.domain.member.Member;
+import farm.board.domain.member.RoleType;
 import farm.board.dto.sign.RefreshTokenResponse;
 import farm.board.dto.sign.SignInRequest;
 import farm.board.dto.sign.SignInResponse;

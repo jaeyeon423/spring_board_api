@@ -1,6 +1,6 @@
 package farm.board.config.security.guard;
 
-import farm.board.domain.RoleType;
+import farm.board.domain.member.RoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

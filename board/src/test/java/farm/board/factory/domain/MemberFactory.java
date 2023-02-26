@@ -1,7 +1,7 @@
 package farm.board.factory.domain;
 
-import farm.board.domain.Member;
-import farm.board.domain.Role;
+import farm.board.domain.member.Member;
+import farm.board.domain.member.Role;
 
 import java.util.List;
 

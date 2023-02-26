@@ -2,7 +2,7 @@ package farm.board.config.security.guard;
 
 import farm.board.config.security.CustomAuthenticationToken;
 import farm.board.config.security.CustomUserDetails;
-import farm.board.domain.RoleType;
+import farm.board.domain.member.RoleType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

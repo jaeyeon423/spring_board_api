@@ -1,6 +1,6 @@
 package farm.board.service.member;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import farm.board.dto.member.MemberDto;
 import farm.board.exception.MemberNotFoundException;
 import farm.board.repository.member.MemberRepository;

@@ -1,6 +1,6 @@
 package farm.board.config.security;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import farm.board.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

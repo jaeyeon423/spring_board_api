@@ -1,22 +1,19 @@
 package farm.board.service.member;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import farm.board.dto.member.MemberDto;
 import farm.board.exception.MemberNotFoundException;
 import farm.board.repository.member.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static farm.board.factory.domain.MemberFactory.createMember;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
 

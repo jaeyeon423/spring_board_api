@@ -1,7 +1,7 @@
 package farm.board.factory.domain;
 
-import farm.board.domain.Role;
-import farm.board.domain.RoleType;
+import farm.board.domain.member.Role;
+import farm.board.domain.member.RoleType;
 
 public class RoleFactory {
     public static Role createRole() {

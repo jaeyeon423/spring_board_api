@@ -1,6 +1,6 @@
 package farm.board.controller.member;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import farm.board.dto.sign.SignInRequest;
 import farm.board.dto.sign.SignInResponse;
 import farm.board.exception.MemberNotFoundException;

@@ -35,13 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable() // Form 로그인을 사용하지 않음
                 .csrf().disable() // CSRF 공격으로부터 보호하지 않음
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음
-                .and()
+                    .and()
                     .authorizeRequests() // 요청에 대한 인가를 구성
-                        .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up", "/api/refresh-token").permitAll()// 회원가입과 로그인 POST 요청은 인증 없이 허용
-                        .antMatchers(HttpMethod.GET, "/api/**").permitAll() // /api/** Get 요청은 인증 없이 허용
-                        .antMatchers(HttpMethod.DELETE, "/api/members/{id}/**").access("@memberGuard.check(#id)") //회원 삭제 요청은 MemberGuard.check 검사를 통해 권한이 있는 사용자만 허용
-                        .anyRequest().hasAnyRole("ADMIN")
-                .and()
+                    .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up", "/api/refresh-token").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+                    .antMatchers(HttpMethod.DELETE,"/api/members/{id}/**").access("@memberGuard.check(#id)")
+                    .antMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
+                    .anyRequest().hasAnyRole("ADMIN")
+                    .and()
                     .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()) // 엑세스 거부 예외
                 .and()
                     .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())

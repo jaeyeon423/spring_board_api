@@ -1,20 +1,24 @@
 package farm.board;
 
-import farm.board.domain.Member;
-import farm.board.domain.Role;
-import farm.board.domain.RoleType;
+import farm.board.domain.member.Member;
+import farm.board.domain.member.Role;
+import farm.board.domain.member.RoleType;
+import farm.board.domain.category.Category;
+import farm.board.exception.MemberNotFoundException;
 import farm.board.exception.RoleNotFoundException;
+import farm.board.repository.category.CategoryRepository;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,14 +30,16 @@ public class InitDB {
     private final RoleRepository roleRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CategoryRepository categoryRepository;
 
-    @PostConstruct //객체 생성 후 초기화를 수행하는 메소드를 정의
+    @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void initDB(){
         log.info("initialize database");
         initRole();
         initTestAdmin();
         initTestMember();
+        initCategory();
     }
 
     private void initRole(){
@@ -58,5 +64,16 @@ public class InitDB {
                         new Member("member2@member.com", passwordEncoder.encode("123456a!"), "member2", "member2",
                                 List.of(roleRepository.findByRoleType(RoleType.ROLE_NORMAL).orElseThrow(RoleNotFoundException::new))))
         );
+    }
+
+    private void initCategory() {
+        Category c1 = categoryRepository.save(new Category("category1", null));
+        Category c2 = categoryRepository.save(new Category("category2", c1));
+        Category c3 = categoryRepository.save(new Category("category3", c1));
+        Category c4 = categoryRepository.save(new Category("category4", c2));
+        Category c5 = categoryRepository.save(new Category("category5", c2));
+        Category c6 = categoryRepository.save(new Category("category6", c4));
+        Category c7 = categoryRepository.save(new Category("category7", c3));
+        Category c8 = categoryRepository.save(new Category("category8", null));
     }
 }

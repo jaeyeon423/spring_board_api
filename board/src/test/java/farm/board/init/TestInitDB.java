@@ -1,9 +1,11 @@
 package farm.board.init;
 
-import farm.board.domain.Member;
-import farm.board.domain.Role;
-import farm.board.domain.RoleType;
+import farm.board.domain.member.Member;
+import farm.board.domain.member.Role;
+import farm.board.domain.member.RoleType;
+import farm.board.domain.category.Category;
 import farm.board.exception.RoleNotFoundException;
+import farm.board.repository.category.CategoryRepository;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class TestInitDB {
     @Autowired MemberRepository memberRepository;
     @Autowired PasswordEncoder passwordEncoder;
 
+    @Autowired CategoryRepository categoryRepository;
+
     private String adminEmail = "admin@admin.com";
     private String member1Email = "member1@member.com";
     private String member2Email = "member2@member.com";
@@ -30,6 +34,7 @@ public class TestInitDB {
         initRole(); // RoleType enum의 모든 값을 role에 저장
         initTestAdmin(); //관리자 계정 추가
         initTestMember(); // 멤버 계정 추가
+        initCategory();
     }
 
     private void initRole() {
@@ -55,6 +60,13 @@ public class TestInitDB {
                                 List.of(roleRepository.findByRoleType(RoleType.ROLE_NORMAL).orElseThrow(RoleNotFoundException::new))))
         );
     }
+
+    private void initCategory() {
+        Category category1 = new Category("category1", null);
+        Category category2 = new Category("category2", category1);
+        categoryRepository.saveAll(List.of(category1, category2));
+    }
+
 
     public String getAdminEmail() {
         return adminEmail;

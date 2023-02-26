@@ -1,6 +1,6 @@
 package farm.board.repository.member;
 
-import farm.board.domain.Member;
+import farm.board.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
