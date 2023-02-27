@@ -3,24 +3,29 @@ package farm.board.controller.category;
 import farm.board.controller.response.Response;
 import farm.board.dto.category.CategoryCreateRequest;
 import farm.board.service.category.CategoryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+@Api(value = "Category Controller", tags = "Category")
 @RestController
 @RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @ApiOperation(value = "모든 카테고리 조회", notes = "모든 카테고리를 조회한다.")
     @GetMapping("/api/categories")
     @ResponseStatus(HttpStatus.OK)
-    public Response readAll(){
+    public Response readAll() {
         return Response.success(categoryService.readAll());
     }
 
+    @ApiOperation(value = "카테고리 생성", notes = "카테고리를 생성한다.")
     @PostMapping("/api/categories")
     @ResponseStatus(HttpStatus.CREATED)
     public Response create(@Valid @RequestBody CategoryCreateRequest req) {
@@ -28,9 +33,10 @@ public class CategoryController {
         return Response.success();
     }
 
+    @ApiOperation(value = "카테고리 삭제", notes = "카테고리를 삭제한다.")
     @DeleteMapping("/api/categories/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response delete(@PathVariable Long id){
+    public Response delete(@ApiParam(value = "카테고리 id", required = true) @PathVariable Long id) {
         categoryService.delete(id);
         return Response.success();
     }

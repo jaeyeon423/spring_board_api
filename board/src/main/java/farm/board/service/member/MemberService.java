@@ -21,8 +21,8 @@ public class MemberService {
 
     @Transactional
     public void delete(Long id){
-        if(notExistsMember(id)) throw new MemberNotFoundException(); //회원이 없으면 예외 발생
-        memberRepository.deleteById(id); //회원 삭제
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
+        memberRepository.delete(member);
     }
 
     private boolean notExistsMember(Long id){ // id에 해당하는 회원 정보가 존재하지 않는지 확인
