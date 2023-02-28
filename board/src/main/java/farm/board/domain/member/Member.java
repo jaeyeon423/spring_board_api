@@ -33,10 +33,10 @@ public class Member extends EntityDate {
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST) // 부모 엔티티의 새로운 자식 엔티티를 추가 할 때, 자식 엔티티도 영속화된다.
     private List<MemberRole> roles;
 
-    public Member(String email, String password, String username, String nickname, List<Role> roles) {
+    public  Member(String email, String password, String username, String nickname, List<Role> roles) {
         this.email = email;
         this.password = password;
         this.username = username;
