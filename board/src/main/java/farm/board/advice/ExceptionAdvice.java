@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.net.BindException;
+
 @RestControllerAdvice //@ControllerAdvice + @ResponseBody -> 예외 발생할 경우 자동으로 JSON 형식의 응답을 반환
 @Slf4j // Lombok 라이브러리에서 제공하는 로깅 어노테이션
 public class ExceptionAdvice {
@@ -86,5 +88,30 @@ public class ExceptionAdvice {
     public Response cannotConvertNestedStructureException(CannotConvertNestedStructureException e) {
         log.info("e = {}", e.getMessage());
         return Response.failure(-1011, "중첩 구조 변환에 실패하였습니다.");
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response postNotFoundException() {
+        return Response.failure(-1012, "존재하지 않는 게시글입니다.");
+    }
+
+    @ExceptionHandler(UnsupportedImageFormatException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response unsupportedImageFormatException() {
+        return Response.failure(-1013, "지원하지 않는 이미지 형식입니다.");
+    }
+
+    @ExceptionHandler(FileUploadFailureException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response fileUploadFailureException(FileUploadFailureException e) {
+        log.info("e = {}", e.getMessage());
+        return Response.failure(-1014, "파일 업로드에 실패하였습니다.");
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response bindException(BindException e){
+        return Response.failure(-1015, e.getMessage());
     }
 }

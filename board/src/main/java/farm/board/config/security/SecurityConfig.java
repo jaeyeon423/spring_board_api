@@ -37,12 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음
                     .and()
                     .authorizeRequests() // 요청에 대한 인가를 구성
-                    .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up", "/api/refresh-token").permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                    .antMatchers(HttpMethod.DELETE,"/api/members/{id}/**").access("@memberGuard.check(#id)")
-                    .antMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
-                    .antMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
-                    .anyRequest().hasAnyRole("ADMIN")
+                        .antMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up", "/api/refresh-token").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/image/**").permitAll()
+                        .antMatchers(HttpMethod.DELETE,"/api/members/{id}/**").access("@memberGuard.check(#id)")
+                        .antMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.POST, "/api/posts").authenticated()
+                        .anyRequest().hasAnyRole("ADMIN")
                     .and()
                     .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()) // 엑세스 거부 예외
                 .and()

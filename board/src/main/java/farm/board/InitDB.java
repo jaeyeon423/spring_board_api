@@ -4,10 +4,12 @@ import farm.board.domain.member.Member;
 import farm.board.domain.member.Role;
 import farm.board.domain.member.RoleType;
 import farm.board.domain.category.Category;
+import farm.board.domain.post.Post;
 import farm.board.exception.MemberNotFoundException;
 import farm.board.exception.RoleNotFoundException;
 import farm.board.repository.category.CategoryRepository;
 import farm.board.repository.member.MemberRepository;
+import farm.board.repository.post.PostRepository;
 import farm.board.repository.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component // 해당 객체를 어플리케이션 내에서 사용할 수 있도록 Bean으로 관리하는 역할
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class InitDB {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CategoryRepository categoryRepository;
+    private final PostRepository postRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -40,6 +44,7 @@ public class InitDB {
         initTestAdmin();
         initTestMember();
         initCategory();
+        initPost();
     }
 
     private void initRole(){
@@ -75,5 +80,14 @@ public class InitDB {
         Category c6 = categoryRepository.save(new Category("category6", c4));
         Category c7 = categoryRepository.save(new Category("category7", c3));
         Category c8 = categoryRepository.save(new Category("category8", null));
+    }
+
+    private void initPost() {
+        Member member = memberRepository.findAll().get(0);
+        Category category = categoryRepository.findAll().get(0);
+        IntStream.range(0, 100)
+                .forEach(i -> postRepository.save(
+                        new Post("title" + i, "content" + i, member, category, List.of())
+                ));
     }
 }
