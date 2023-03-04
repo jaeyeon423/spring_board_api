@@ -1,8 +1,11 @@
 package farm.board.service.post;
 
+import farm.board.domain.post.Post;
 import farm.board.dto.post.PostCreateRequest;
+import farm.board.dto.post.PostDto;
 import farm.board.exception.CategoryNotFoundException;
 import farm.board.exception.MemberNotFoundException;
+import farm.board.exception.PostNotFoundException;
 import farm.board.exception.UnsupportedImageFormatException;
 import farm.board.factory.dto.PostCreateRequestFactory;
 import farm.board.repository.category.CategoryRepository;
@@ -28,7 +31,7 @@ import static farm.board.factory.domain.MemberFactory.*;
 import static farm.board.factory.domain.CategoryFactory.*;
 import static farm.board.factory.domain.PostFactory.*;
 import static farm.board.factory.domain.ImageFactory.*;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -90,5 +93,27 @@ class PostServiceTest {
         // when, then
         assertThatThrownBy(() -> postService.create(req)).isInstanceOf(UnsupportedImageFormatException.class);
     }
+
+    @Test
+    public void readTest(){
+        //given
+        Post post = createPostWithImages(List.of(createImage(), createImage()));
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+
+        //when
+        PostDto postDto = postService.read(1L);
+
+        //then
+        assertThat(postDto.getImages().size()).isEqualTo(post.getImages().size());
+    }
+    @Test
+    void readExceptionByPostNotFoundTest() {
+        // given
+        given(postRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
+
+        // when, then
+        assertThatThrownBy(() -> postService.read(1L)).isInstanceOf(PostNotFoundException.class);
+    }
+
 
 }

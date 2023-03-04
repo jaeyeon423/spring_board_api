@@ -44,7 +44,7 @@ public class InitDB {
         initTestAdmin();
         initTestMember();
         initCategory();
-        initPost();
+//        initPost();
     }
 
     private void initRole(){

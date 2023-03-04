@@ -4,6 +4,8 @@ import farm.board.domain.post.Image;
 import farm.board.domain.post.Post;
 import farm.board.dto.post.PostCreateRequest;
 import farm.board.dto.post.PostCreateResponse;
+import farm.board.dto.post.PostDto;
+import farm.board.exception.PostNotFoundException;
 import farm.board.repository.category.CategoryRepository;
 import farm.board.repository.member.MemberRepository;
 import farm.board.repository.post.PostRepository;
@@ -37,6 +39,10 @@ public class PostService {
         );
         uploadImages(post.getImages(), req.getImages());
         return new PostCreateResponse(post.getId());
+    }
+
+    public PostDto read(Long id){
+        return PostDto.toDto(postRepository.findById(id).orElseThrow(PostNotFoundException::new));
     }
 
     private void uploadImages(List<Image> images, List<MultipartFile> filenames) {
