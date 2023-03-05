@@ -22,6 +22,7 @@ import java.util.List;
 import static farm.board.factory.dto.PostCreateRequestFactory.createPostCreateRequestWithImages;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,6 +67,18 @@ class PostControllerTest {
 
         PostCreateRequest captureRequest = postCreateRequestArgumentCaptor.getValue();
         Assertions.assertThat(captureRequest.getImages().size()).isEqualTo(2);
+    }
+
+    @Test
+    void deleteTest() throws Exception {
+        // given
+        Long id = 1L;
+
+        // when, then
+        mockMvc.perform(
+                        delete("/api/posts/{id}", id))
+                .andExpect(status().isOk());
+        verify(postService).delete(id);
     }
 
 }
